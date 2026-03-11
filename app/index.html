@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>司法書士試験 学習支援 AI</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <main id="workspaceScreen" class="screen workspace-screen">
+        <section class="chat-panel">
+          <div class="workspace-topbar">
+            <button id="workspaceMenuButton" class="icon-button icon-button-quiet topbar-icon" type="button" aria-label="メニューを開く">≡</button>
+            <p id="conversationTitle" class="workspace-conversation-title">新しいチャット</p>
+            <div class="topbar-spacer" aria-hidden="true"></div>
+          </div>
+
+          <div id="chatHistory" class="chat-history" aria-live="polite"></div>
+
+          <form id="chatForm" class="chat-input" autocomplete="off">
+            <button id="quickMemoButton" class="floating-memo-button" type="button">復習カード登録</button>
+            <div class="chat-input-shell">
+              <div class="composer-inline-row">
+                <button id="randomQuizButton" class="composer-plus-button" type="button" aria-label="ランダム腕試し">+</button>
+                <div id="chatModeSelector" class="chat-mode-selector chat-mode-selector-compact" aria-label="入力モード選択"></div>
+                <div class="composer-inline-actions">
+                  <button id="chatCancelButton" type="button" class="micro-button hidden" disabled>取りやめる</button>
+                </div>
+              </div>
+              <label for="chatInput" class="sr-only">質問入力</label>
+              <textarea
+                id="chatInput"
+                name="chatInput"
+                rows="2"
+                maxlength="1200"
+                placeholder="質問してみましょう"
+                required
+              ></textarea>
+              <div class="chat-submit-row">
+                <button id="chatSubmitButton" type="submit" class="send-button" disabled aria-label="送信">↑</button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <div id="menuDrawer" class="menu-overlay hidden" aria-hidden="true">
+      <div class="menu-backdrop" data-action="close-menu"></div>
+      <aside class="menu-drawer" aria-label="メニュー">
+        <div class="menu-drawer-head">
+          <p class="menu-title">メニュー</p>
+          <button id="closeMenuButton" type="button" class="icon-button icon-button-quiet" data-action="close-menu" aria-label="メニューを閉じる">×</button>
+        </div>
+        <div class="menu-primary-actions">
+          <button id="openGuideButton" type="button" class="menu-action menu-action-important">アプリの使い方（超重要）</button>
+          <button id="openTaskModalButton" type="button" class="menu-action">復習メモを見る</button>
+          <button id="openProgressModalButton" type="button" class="menu-action">到達状況を確認する</button>
+          <button id="newConversationButton" type="button" class="menu-action">新規ページを開く</button>
+        </div>
+        <section class="conversation-section">
+          <div class="conversation-section-head">
+            <p class="menu-section-label">過去の対話ログ一覧</p>
+          </div>
+          <div id="conversationList" class="conversation-list"></div>
+        </section>
+      </aside>
+    </div>
+
+    <div id="guideModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle">
+      <div class="modal-backdrop" data-action="close-guide-modal"></div>
+      <div class="modal-card guide-modal-card">
+        <div class="modal-head">
+          <div>
+            <h2 id="guideModalTitle">アプリの使い方（超重要）</h2>
+          </div>
+          <button type="button" class="icon-button icon-button-quiet" data-action="close-guide-modal" aria-label="使い方を閉じる">×</button>
+        </div>
+        <div class="modal-body guide-modal-body">
+          <p>
+            このアプリは、
+            <strong>理解 → 演習 → メモ → テキスト復習 → 再確認</strong>
+            の流れで、司法書士試験の学習を進めるためのツールです。
+          </p>
+          <ul class="home-guide-list">
+            <li>解説モード：わからない点をAIに質問する</li>
+            <li>作問モード：AIが作成した問題を解き、その場で採点・解説を確認する</li>
+            <li>復習メモ：気になった論点をメモし、テキスト復習後に確認問題で再チェックする</li>
+          </ul>
+          <p>
+            気になった点は復習メモに残し、AIだけで終わらせず、必ずテキストに戻って復習することを前提に使いましょう。
+          </p>
+          <div class="guide-pillar-list">
+            <article class="pillar-card">
+              <p class="pillar-index">① 解説モード</p>
+              <p>わからない論点や条文を、その場でAIに質問できます。復習が必要だと感じた点は復習メモにメモしましょう。</p>
+            </article>
+            <article class="pillar-card">
+              <p class="pillar-index">② 作問モード</p>
+              <p>司法書士試験を想定した問題を演習し、その場で採点・解説まで確認します。演習中に気になった点は復習メモに残しましょう。</p>
+            </article>
+            <article class="pillar-card">
+              <p class="pillar-index">③ 復習メモ</p>
+              <p>気になった論点を残し、あとでテキストに戻って復習します。復習後は「問題を解く」で理解の定着を確認してください。</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="progressModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="progressModalTitle">
+      <div class="modal-backdrop" data-action="close-progress-modal"></div>
+      <div class="modal-card progress-modal-card">
+        <div class="modal-head">
+          <div>
+            <h2 id="progressModalTitle">到達状況</h2>
+          </div>
+          <button type="button" class="icon-button icon-button-quiet" data-action="close-progress-modal" aria-label="到達状況を閉じる">×</button>
+        </div>
+        <div class="modal-body progress-modal-body">
+          <div class="progress-stat-list">
+            <div class="progress-stat-row">
+              <p>現在ポイント</p>
+              <strong id="progressModalPoints">0pt</strong>
+            </div>
+            <div class="progress-stat-row">
+              <p>現在の山ランク</p>
+              <strong id="progressModalRank">テーブルマウンテン</strong>
+            </div>
+            <div class="progress-stat-row">
+              <p>次の山まで</p>
+              <strong id="progressModalNext">高尾山まであと20pt</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="taskModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+      <div class="modal-backdrop" data-action="close-task-modal"></div>
+      <div class="modal-card task-modal-card">
+        <div class="modal-head task-modal-head">
+          <div>
+            <h2 id="taskModalTitle">復習メモ</h2>
+          </div>
+          <button id="closeTaskModalButton" type="button" class="icon-button icon-button-quiet" data-action="close-task-modal" aria-label="復習メモを閉じる">×</button>
+        </div>
+        <div class="modal-body task-modal-body">
+          <form id="taskForm" class="task-form" autocomplete="off">
+            <label for="taskInput" class="sr-only">復習メモ名</label>
+            <input id="taskInput" name="taskInput" type="text" maxlength="120" placeholder="例: 民法177条の対抗要件" required />
+            <button class="primary-button" type="submit">追加</button>
+          </form>
+          <div id="taskList" class="task-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="quizModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <div class="modal-backdrop" data-action="close-modal"></div>
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <div class="quiz-head-top">
+              <p id="quizSubject" class="quiz-subject"></p>
+              <p id="quizState" class="quiz-state">出題中</p>
+            </div>
+            <h2 id="quizTitle">確認問題</h2>
+            <p id="quizTopic" class="quiz-topic"></p>
+            <p id="quizSetId" class="quiz-set-id"></p>
+          </div>
+          <button type="button" class="icon-button" data-action="close-modal">閉じる</button>
+        </div>
+
+        <div class="modal-body">
+          <p id="quizQuestion" class="quiz-question"></p>
+          <form id="quizOptions" class="quiz-options"></form>
+          <div id="quizResult" class="quiz-result" aria-live="polite"></div>
+          <div id="quizExplanation" class="quiz-explanation hidden"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="submitQuizAnswerButton" type="button" class="secondary-button" disabled>回答する</button>
+          <button id="gradeQuizButton" type="button" class="primary-button" disabled>採点する</button>
+          <button id="showExplanationButton" type="button" class="secondary-button hidden">解説を見る</button>
+          <button id="spawnRelatedQuizButton" type="button" class="secondary-button hidden">類題を出す</button>
+          <button id="spawnNextQuizButton" type="button" class="secondary-button hidden">次の問題を作る</button>
+          <button id="exportQuizPdfButton" type="button" class="ghost-button">PDF化</button>
+          <button id="discardQuizButton" type="button" class="ghost-button">この問題を破棄して次へ進む</button>
+          <button id="addQuizTopicTaskButton" type="button" class="ghost-button">この問題の論点を復習メモに追加</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

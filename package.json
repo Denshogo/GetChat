@@ -1,0 +1,16 @@
+{
+  "name": "getchat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "node server/index.js",
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check-syntax.mjs",
+    "typecheck": "node -e \"console.log('TypeScript未導入のためスキップ')\"",
+    "smoke": "node scripts/flow-smoke.mjs"
+  },
+  "dependencies": {
+    "openai": "^6.27.0"
+  }
+}
