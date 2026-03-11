@@ -10,22 +10,34 @@ export function createChatMessageItem(message) {
   }
 
   if ((message.keywords ?? []).length > 0) {
-    const keywords = document.createElement("p");
-    keywords.className = "message-keywords";
-    keywords.textContent = `【検索用キーワード】${(message.keywords ?? []).join(" / ")}`;
-    wrapper.appendChild(keywords);
+    const keywordsRow = document.createElement("div");
+    keywordsRow.className = "message-keywords-row";
+    (message.keywords ?? []).forEach((kw) => {
+      const chip = document.createElement("span");
+      chip.className = "message-keyword-chip";
+      chip.textContent = kw;
+      keywordsRow.appendChild(chip);
+    });
+    wrapper.appendChild(keywordsRow);
   }
 
   const conclusion = document.createElement("p");
-  conclusion.className = "message-block";
+  conclusion.className = "message-conclusion";
   conclusion.textContent = message.conclusion;
   wrapper.appendChild(conclusion);
 
   if (message.reason) {
-    const reason = document.createElement("p");
-    reason.className = "message-block message-reason";
-    reason.textContent = message.reason;
-    wrapper.appendChild(reason);
+    const divider = document.createElement("hr");
+    divider.className = "message-divider";
+    wrapper.appendChild(divider);
+
+    const explanation = document.createElement("div");
+    explanation.className = "message-explanation";
+    message.reason.split("\n").forEach((line, i) => {
+      if (i > 0) explanation.appendChild(document.createElement("br"));
+      explanation.appendChild(document.createTextNode(line));
+    });
+    wrapper.appendChild(explanation);
   }
 
   if (message.suggestedTaskTitle && message.canGenerateQuiz) {
