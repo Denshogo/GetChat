@@ -5,14 +5,16 @@ export function createChatMessageItem(message) {
   wrapper.className = `message ${message.role}`;
 
   if (message.role === "user") {
-    wrapper.textContent = message.content;
+    wrapper.textContent = message.content ?? "";
     return wrapper;
   }
 
-  if ((message.keywords ?? []).length > 0) {
+  // キーワードチップ
+  const keywords = message.keywords ?? [];
+  if (keywords.length > 0) {
     const keywordsRow = document.createElement("div");
     keywordsRow.className = "message-keywords-row";
-    (message.keywords ?? []).forEach((kw) => {
+    keywords.forEach((kw) => {
       const chip = document.createElement("span");
       chip.className = "message-keyword-chip";
       chip.textContent = kw;
@@ -21,19 +23,25 @@ export function createChatMessageItem(message) {
     wrapper.appendChild(keywordsRow);
   }
 
-  const conclusion = document.createElement("p");
-  conclusion.className = "message-conclusion";
-  conclusion.textContent = message.conclusion;
-  wrapper.appendChild(conclusion);
+  // 結論（conclusion が空なら content を使用）
+  const conclusionText = message.conclusion || message.content || "";
+  if (conclusionText) {
+    const conclusion = document.createElement("p");
+    conclusion.className = "message-conclusion";
+    conclusion.textContent = conclusionText;
+    wrapper.appendChild(conclusion);
+  }
 
-  if (message.reason) {
+  // 補足説明
+  const reason = message.reason ?? "";
+  if (reason) {
     const divider = document.createElement("hr");
     divider.className = "message-divider";
     wrapper.appendChild(divider);
 
     const explanation = document.createElement("div");
     explanation.className = "message-explanation";
-    message.reason.split("\n").forEach((line, i) => {
+    reason.split("\n").forEach((line, i) => {
       if (i > 0) explanation.appendChild(document.createElement("br"));
       explanation.appendChild(document.createTextNode(line));
     });

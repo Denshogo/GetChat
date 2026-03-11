@@ -82,4 +82,21 @@ export class TaskRepository {
   findById(taskId) {
     return this.list().find((task) => task.id === taskId) ?? null;
   }
+
+  remove(taskId) {
+    const tasks = this.list().filter((task) => task.id !== taskId);
+    saveJson(STORAGE_KEYS.TASKS, tasks);
+  }
+
+  updateTitle(taskId, newTitle) {
+    const normalized = normalizeTopic(newTitle);
+    if (!normalized) {
+      return;
+    }
+
+    const tasks = this.list().map((task) =>
+      task.id === taskId ? { ...task, title: normalized } : task,
+    );
+    saveJson(STORAGE_KEYS.TASKS, tasks);
+  }
 }

@@ -1105,7 +1105,36 @@ button {
 .task-actions {
   margin-top: 8px;
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.task-action-small {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.task-action-delete {
+  color: var(--danger);
+  border-color: #e8c2c2;
+}
+
+.task-action-delete:hover {
+  background: #fdf0f0;
+}
+
+.task-edit-input {
+  flex: 1;
+  width: 100%;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 3px 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
 }
 
 .task-card.completed {

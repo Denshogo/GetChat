@@ -32,20 +32,36 @@ export function createTaskCard(task) {
   meta.textContent = `作成: ${formatDateTime(task.created_at)}${completedLabel}`;
   card.appendChild(meta);
 
-  if (task.is_completed) {
-    const actions = document.createElement("div");
-    actions.className = "task-actions";
+  const actions = document.createElement("div");
+  actions.className = "task-actions";
 
+  if (task.is_completed) {
     const reviewButton = document.createElement("button");
     reviewButton.type = "button";
     reviewButton.className = "secondary-button";
     reviewButton.dataset.action = "task-quiz";
     reviewButton.dataset.taskId = task.id;
     reviewButton.textContent = "確認問題を解く";
-
     actions.appendChild(reviewButton);
-    card.appendChild(actions);
   }
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "ghost-button task-action-small";
+  editButton.dataset.action = "start-edit-task";
+  editButton.dataset.taskId = task.id;
+  editButton.textContent = "編集";
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "ghost-button task-action-small task-action-delete";
+  deleteButton.dataset.action = "delete-task";
+  deleteButton.dataset.taskId = task.id;
+  deleteButton.textContent = "削除";
+
+  actions.appendChild(editButton);
+  actions.appendChild(deleteButton);
+  card.appendChild(actions);
 
   return card;
 }
