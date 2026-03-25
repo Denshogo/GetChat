@@ -335,21 +335,72 @@ export class StudySupportApp {
         return;
       }
 
-      if (target.dataset.action !== "task-quiz") {
-        return;
-      }
-
+      const action = target.dataset.action;
       const taskId = target.dataset.taskId;
       if (!taskId) {
         return;
       }
 
-      const task = this.taskFeature.findById(taskId);
-      if (!task) {
+      if (action === "task-quiz") {
+        const task = this.taskFeature.findById(taskId);
+        if (!task) {
+          return;
+        }
+
+        void this.handleTaskQuiz(task);
         return;
       }
 
-      void this.handleTaskQuiz(task);
+      if (action === "delete-task") {
+        const tasks = this.taskFeature.removeTask(taskId);
+        this.store.setTasks(tasks);
+        this.renderTasks();
+        this.showNotice("復習メモを削除しました");
+        return;
+      }
+
+      if (action === "start-edit-task") {
+        const card = target.closest(".task-card");
+        if (!card) {
+          return;
+        }
+
+        const titleEl = card.querySelector(".task-title");
+        if (!titleEl) {
+          return;
+        }
+
+        const currentTitle = titleEl.textContent;
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = currentTitle;
+        input.className = "task-edit-input";
+
+        const save = () => {
+          const newTitle = input.value.trim();
+          if (newTitle && newTitle !== currentTitle) {
+            const tasks = this.taskFeature.updateTitle(taskId, newTitle);
+            this.store.setTasks(tasks);
+            this.showNotice("復習メモを更新しました");
+          }
+          this.renderTasks();
+        };
+
+        input.addEventListener("blur", save);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            save();
+          }
+          if (e.key === "Escape") {
+            this.renderTasks();
+          }
+        });
+
+        titleEl.replaceWith(input);
+        input.focus();
+        input.select();
+      }
     });
 
     this.dom.quizOptions.addEventListener("change", (event) => {

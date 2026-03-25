@@ -1,13 +1,13 @@
 :root {
-  --bg: #eef3ec;
+  --bg: #f5f4ef;
   --surface: #ffffff;
-  --surface-muted: #f4f7f2;
-  --line: #c6d2c2;
-  --text: #1f2a1f;
-  --subtext: #4f5d4f;
+  --surface-muted: #f9f8f4;
+  --line: #e0ddd6;
+  --text: #1a1a1a;
+  --subtext: #6b6b6b;
   --accent: #1f7a63;
   --accent-strong: #145746;
-  --accent-soft: #d8ece6;
+  --accent-soft: #e0ede9;
   --mode-explain: #1c7c68;
   --mode-explain-soft: #e4f5ee;
   --mode-quiz: #a85e12;
@@ -16,8 +16,8 @@
   --mode-grading-soft: #fbe8f4;
   --warning: #9a6b00;
   --danger: #9c2f2f;
-  --shadow: 0 18px 40px rgba(19, 31, 22, 0.12);
-  --radius-lg: 18px;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 8px;
 }
@@ -32,7 +32,7 @@ body {
   min-height: 100%;
   color: var(--text);
   font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
-  background: linear-gradient(180deg, #f1f4f1 0%, #ecefeb 100%);
+  background: var(--bg);
 }
 
 h1,
@@ -80,15 +80,13 @@ button {
 .home-guide-panel {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.93);
+  background: var(--surface);
   box-shadow: var(--shadow);
 }
 
 .home-hero {
   padding: 28px;
-  background:
-    radial-gradient(circle at top right, rgba(31, 122, 99, 0.12), transparent 30%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 251, 248, 0.96) 100%);
+  background: var(--surface);
 }
 
 .home-title {
@@ -364,7 +362,7 @@ button {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--surface);
   box-shadow: var(--shadow);
 }
 
@@ -462,7 +460,7 @@ button {
 .task-panel {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--surface);
   box-shadow: var(--shadow);
 }
 
@@ -676,39 +674,63 @@ button {
 }
 
 .message {
-  max-width: min(90%, 720px);
-  border-radius: 18px;
-  padding: 11px 13px;
-  line-height: 1.6;
+  max-width: min(88%, 720px);
+  border-radius: 16px;
+  padding: 10px 14px;
+  line-height: 1.65;
   font-size: 14px;
-  border: 1px solid transparent;
+  border: none;
 }
 
 .message.user {
   margin-left: auto;
-  background: #edf2ee;
-  border-color: #dde7df;
+  background: #e8e6e0;
+  border-radius: 16px 16px 4px 16px;
+  color: #1a1a1a;
 }
 
 .message.assistant {
   margin-right: auto;
   background: transparent;
   border-color: transparent;
-  padding-left: 2px;
+  padding-left: 0;
 }
 
-.message-keywords {
+.message-keywords-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.message-keyword-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eae8e2;
+  color: #5a5548;
   font-size: 11px;
-  font-weight: 700;
-  color: #5a6871;
+  font-weight: 600;
 }
 
-.message-block {
-  margin-top: 6px;
+.message-conclusion {
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
 }
 
-.message-reason {
-  color: #556355;
+.message-divider {
+  border: none;
+  border-top: 1px solid #e8e6e1;
+  margin: 8px 0;
+}
+
+.message-explanation {
+  color: #4a4845;
+  font-size: 13.5px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  margin: 0;
 }
 
 .message-actions {
@@ -800,7 +822,7 @@ button {
   display: grid;
   gap: 6px;
   padding: 6px 0;
-  background: linear-gradient(180deg, rgba(232, 239, 234, 0) 0%, rgba(232, 239, 234, 0.94) 22%, rgba(232, 239, 234, 0.985) 100%);
+  background: linear-gradient(180deg, rgba(245, 244, 239, 0) 0%, rgba(245, 244, 239, 0.95) 20%, #f5f4ef 100%);
   z-index: 6;
 }
 
@@ -818,9 +840,9 @@ button {
 
 .chat-input-shell {
   flex: 1;
-  border: 1px solid #e1e5e2;
-  border-radius: 22px;
-  background: rgba(243, 246, 244, 0.985);
+  border: 1px solid #d4d1c8;
+  border-radius: 20px;
+  background: #ffffff;
   padding: 7px 8px 7px 10px;
 }
 
@@ -927,7 +949,8 @@ button {
   min-height: 34px;
   max-height: 108px;
   background: transparent;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  color: var(--text);
+  transition: color 0.15s ease;
   margin-top: 2px;
   line-height: 1.5;
 }
@@ -939,7 +962,7 @@ button {
 }
 
 .chat-input textarea::placeholder {
-  color: #8b9690;
+  color: #a0998f;
 }
 
 .chat-input textarea:focus {
@@ -977,8 +1000,8 @@ button {
   height: 32px;
   border: none;
   border-radius: 999px;
-  background: #1f7a63;
-  color: #f7fffb;
+  background: #1a1a1a;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 700;
 }
@@ -1082,7 +1105,36 @@ button {
 .task-actions {
   margin-top: 8px;
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.task-action-small {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.task-action-delete {
+  color: var(--danger);
+  border-color: #e8c2c2;
+}
+
+.task-action-delete:hover {
+  background: #fdf0f0;
+}
+
+.task-edit-input {
+  flex: 1;
+  width: 100%;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 3px 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
 }
 
 .task-card.completed {
